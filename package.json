@@ -6,7 +6,8 @@
   "type": "module",
   "scripts": {
     "start": "node index.mjs",
-    "seed": "node database/seed.mjs"
+    "seed": "node database/seed.mjs",
+    "netlify-build": "npm rebuild better-sqlite3 --build-from-source && node index.mjs"
   },
   "keywords": ["wildlife", "adventure", "park", "eco"],
   "author": "",
