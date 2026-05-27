@@ -1,0 +1,19 @@
+{
+  "name": "wildhaven-adventure-park",
+  "version": "1.0.0",
+  "description": "WildHaven Adventure Park - Eco-Adventure Wildlife Park Promotional Website",
+  "main": "index.mjs",
+  "type": "module",
+  "scripts": {
+    "start": "node index.mjs",
+    "seed": "node database/seed.mjs"
+  },
+  "keywords": ["wildlife", "adventure", "park", "eco"],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.21.0",
+    "better-sqlite3": "^11.6.0"
+  }
+}

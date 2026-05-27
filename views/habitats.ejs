@@ -1,0 +1,56 @@
+<%- include('partials/header') %>
+
+<!-- Page Hero -->
+<section class="page-hero page-hero--habitats">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <h1 class="page-hero__title">Our Habitats</h1>
+    <p class="page-hero__subtitle">Five incredible ecosystems, each home to fascinating wildlife from around the world.</p>
+  </div>
+</section>
+
+<!-- Filter Bar -->
+<section class="filter-bar" id="habitat-filters">
+  <div class="container">
+    <div class="filter-bar__inner">
+      <span class="filter-bar__label">Filter by climate:</span>
+      <div class="filter-bar__buttons" id="climate-filter-buttons">
+        <button class="filter-btn filter-btn--active" data-climate="all">All</button>
+        <% climates.forEach(function(c) { %>
+          <button class="filter-btn" data-climate="<%= c.climate %>"><%= c.climate %></button>
+        <% }); %>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Habitats Grid -->
+<section class="section" id="habitats-list">
+  <div class="container">
+    <div class="habitat-grid habitat-grid--full" id="habitats-grid">
+      <% habitats.forEach(function(habitat) { %>
+        <a href="/habitats/<%= habitat.slug %>" class="habitat-card habitat-card--large" id="habitat-card-<%= habitat.id %>">
+          <div class="habitat-card__image-wrapper">
+            <img src="<%= habitat.image %>" alt="<%= habitat.name %> habitat at WildHaven Adventure Park" class="habitat-card__image" loading="lazy">
+            <div class="habitat-card__overlay"></div>
+          </div>
+          <div class="habitat-card__content">
+            <h2 class="habitat-card__title"><%= habitat.name %></h2>
+            <p class="habitat-card__tagline"><%= habitat.tagline %></p>
+            <span class="habitat-card__climate-badge"><%= habitat.climate %></span>
+            <p class="habitat-card__desc"><%= habitat.description.substring(0, 150) %>...</p>
+            <span class="btn btn--small btn--primary">Explore Habitat →</span>
+          </div>
+        </a>
+      <% }); %>
+    </div>
+
+    <div class="no-results" id="no-results-habitats" style="display: none;">
+      <span class="no-results__icon">No results</span>
+      <p>No habitats match your filter. Try a different climate type.</p>
+    </div>
+  </div>
+</section>
+
+<script src="/js/habitats.js"></script>
+<%- include('partials/footer') %>

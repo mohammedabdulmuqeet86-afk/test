@@ -1,0 +1,167 @@
+<%- include('partials/header') %>
+
+<!-- Page Hero -->
+<section class="page-hero page-hero--faq">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <h1 class="page-hero__title">Frequently Asked Questions</h1>
+    <p class="page-hero__subtitle">Everything you need to know before your visit.</p>
+  </div>
+</section>
+
+<!-- FAQ Search and Filter -->
+<section class="filter-bar" id="faq-filters">
+  <div class="container">
+    <div class="filter-bar__inner">
+      <div class="filter-bar__group filter-bar__group--search">
+        <label class="filter-bar__label" for="faq-search">Search:</label>
+        <input type="search" class="filter-input" id="faq-search" placeholder="Search questions..." autocomplete="off" aria-label="Search FAQs">
+      </div>
+      <div class="filter-bar__group">
+        <label class="filter-bar__label" for="faq-category-filter">Category:</label>
+        <select class="filter-select" id="faq-category-filter">
+          <option value="all">All Categories</option>
+          <% categories.forEach(function(c) { %>
+            <option value="<%= c.category %>"><%= c.category %></option>
+          <% }); %>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ Accordion -->
+<section class="section" id="faq-section">
+  <div class="container">
+    <div class="faq-list" id="faq-list">
+      <% faqs.forEach(function(faq, index) { %>
+        <div class="faq-item" id="faq-item-<%= faq.id %>">
+          <button class="faq-item__question" aria-expanded="false" aria-controls="faq-answer-<%= faq.id %>">
+            <span class="faq-item__category-dot faq-item__category-dot--<%= faq.category.toLowerCase().replace(/\s+/g, '-') %>"></span>
+            <span class="faq-item__question-text"><%= faq.question %></span>
+            <span class="faq-item__toggle" aria-hidden="true">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </span>
+          </button>
+          <div class="faq-item__answer" id="faq-answer-<%= faq.id %>" role="region">
+            <div class="faq-item__answer-inner">
+              <span class="faq-item__category-label"><%= faq.category %></span>
+              <p><%= faq.answer %></p>
+            </div>
+          </div>
+        </div>
+      <% }); %>
+    </div>
+
+    <div class="no-results" id="no-results-faq" style="display: none;">
+      <span class="no-results__icon">No results</span>
+      <p>No questions match your search. Try different keywords or browse all categories.</p>
+    </div>
+
+    <!-- Additional Help -->
+    <div class="faq-help" id="faq-help">
+      <h2>Still Have Questions?</h2>
+      <p>Our friendly team is always happy to help. Get in touch and we will get back to you as soon as possible.</p>
+      <a href="/contact" class="btn btn--primary">Contact Us</a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // FAQ Accordion & AJAX filtering (inline to keep it simple)
+  document.addEventListener('DOMContentLoaded', function() {
+    // Accordion toggle
+    const faqItems = document.querySelectorAll('.faq-item__question');
+    faqItems.forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        const item = this.closest('.faq-item');
+        const isOpen = item.classList.contains('faq-item--open');
+
+        // Close all others
+        document.querySelectorAll('.faq-item--open').forEach(function(openItem) {
+          openItem.classList.remove('faq-item--open');
+          openItem.querySelector('.faq-item__question').setAttribute('aria-expanded', 'false');
+        });
+
+        if (!isOpen) {
+          item.classList.add('faq-item--open');
+          this.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+
+    // AJAX FAQ search and filter
+    const searchInput = document.getElementById('faq-search');
+    const categoryFilter = document.getElementById('faq-category-filter');
+    const faqList = document.getElementById('faq-list');
+    const noResults = document.getElementById('no-results-faq');
+    let debounceTimer;
+
+    function fetchFaqs() {
+      const query = searchInput.value.trim();
+      const category = categoryFilter.value;
+      const params = new URLSearchParams();
+      if (query) params.set('q', query);
+      if (category !== 'all') params.set('category', category);
+
+      fetch('/api/faqs?' + params.toString())
+        .then(function(response) { return response.json(); })
+        .then(function(faqs) {
+          if (faqs.length === 0) {
+            faqList.innerHTML = '';
+            noResults.style.display = 'block';
+            return;
+          }
+          noResults.style.display = 'none';
+
+          faqList.innerHTML = faqs.map(function(faq) {
+            return '<div class="faq-item" id="faq-item-' + faq.id + '">' +
+              '<button class="faq-item__question" aria-expanded="false" aria-controls="faq-answer-' + faq.id + '">' +
+                '<span class="faq-item__category-dot faq-item__category-dot--' + faq.category.toLowerCase().replace(/\s+/g, '-') + '"></span>' +
+                '<span class="faq-item__question-text">' + faq.question + '</span>' +
+                '<span class="faq-item__toggle" aria-hidden="true">' +
+                  '<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>' +
+                '</span>' +
+              '</button>' +
+              '<div class="faq-item__answer" id="faq-answer-' + faq.id + '" role="region">' +
+                '<div class="faq-item__answer-inner">' +
+                  '<span class="faq-item__category-label">' + faq.category + '</span>' +
+                  '<p>' + faq.answer + '</p>' +
+                '</div>' +
+              '</div>' +
+            '</div>';
+          }).join('');
+
+          // Re-bind accordion
+          document.querySelectorAll('.faq-item__question').forEach(function(btn) {
+            btn.addEventListener('click', function() {
+              const item = this.closest('.faq-item');
+              const isOpen = item.classList.contains('faq-item--open');
+              document.querySelectorAll('.faq-item--open').forEach(function(openItem) {
+                openItem.classList.remove('faq-item--open');
+                openItem.querySelector('.faq-item__question').setAttribute('aria-expanded', 'false');
+              });
+              if (!isOpen) {
+                item.classList.add('faq-item--open');
+                this.setAttribute('aria-expanded', 'true');
+              }
+            });
+          });
+        })
+        .catch(function(err) {
+          console.error('FAQ search error:', err);
+        });
+    }
+
+    searchInput.addEventListener('input', function() {
+      clearTimeout(debounceTimer);
+      debounceTimer = setTimeout(fetchFaqs, 300);
+    });
+
+    categoryFilter.addEventListener('change', fetchFaqs);
+  });
+</script>
+
+<%- include('partials/footer') %>

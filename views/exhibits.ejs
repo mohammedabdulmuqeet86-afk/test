@@ -1,0 +1,73 @@
+<%- include('partials/header') %>
+
+<!-- Page Hero -->
+<section class="page-hero page-hero--exhibits">
+  <div class="page-hero__overlay"></div>
+  <div class="container page-hero__content">
+    <h1 class="page-hero__title">Experiences &amp; Exhibits</h1>
+    <p class="page-hero__subtitle">Adventures, encounters, and educational experiences across all our habitats.</p>
+  </div>
+</section>
+
+<!-- Filter Bar -->
+<section class="filter-bar" id="exhibit-filters">
+  <div class="container">
+    <div class="filter-bar__inner">
+      <div class="filter-bar__group">
+        <label class="filter-bar__label" for="habitat-filter">Habitat:</label>
+        <select class="filter-select" id="habitat-filter">
+          <option value="all">All Habitats</option>
+          <% habitats.forEach(function(h) { %>
+            <option value="<%= h.id %>"><%= h.name %></option>
+          <% }); %>
+        </select>
+      </div>
+      <div class="filter-bar__group">
+        <label class="filter-bar__label" for="type-filter">Type:</label>
+        <select class="filter-select" id="type-filter">
+          <option value="all">All Types</option>
+          <% types.forEach(function(t) { %>
+            <option value="<%= t.type %>"><%= t.type.charAt(0).toUpperCase() + t.type.slice(1) %></option>
+          <% }); %>
+        </select>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Exhibits Grid -->
+<section class="section" id="exhibits-list">
+  <div class="container">
+    <div class="exhibit-grid" id="exhibits-grid">
+      <% exhibits.forEach(function(exhibit) { %>
+        <article class="exhibit-card" id="exhibit-card-<%= exhibit.id %>">
+          <div class="exhibit-card__image-wrapper">
+            <img src="<%= exhibit.image %>" alt="<%= exhibit.name %> experience at WildHaven" class="exhibit-card__image" loading="lazy">
+            <span class="exhibit-card__type-badge exhibit-card__type-badge--<%= exhibit.type %>"><%= exhibit.type %></span>
+          </div>
+          <div class="exhibit-card__content">
+            <a href="/habitats/<%= exhibit.habitat_slug %>" class="exhibit-card__habitat"><%= exhibit.habitat_name %></a>
+            <h2 class="exhibit-card__title"><%= exhibit.name %></h2>
+            <p class="exhibit-card__desc"><%= exhibit.description %></p>
+            <div class="exhibit-card__meta">
+              <% if (exhibit.duration) { %>
+                <span class="exhibit-card__meta-item"><%= exhibit.duration %></span>
+              <% } %>
+              <% if (exhibit.difficulty) { %>
+                <span class="exhibit-card__meta-item"><%= exhibit.difficulty %></span>
+              <% } %>
+            </div>
+          </div>
+        </article>
+      <% }); %>
+    </div>
+
+    <div class="no-results" id="no-results-exhibits" style="display: none;">
+      <span class="no-results__icon">No results</span>
+      <p>No experiences match your filters. Try adjusting your selection.</p>
+    </div>
+  </div>
+</section>
+
+<script src="/js/exhibits.js"></script>
+<%- include('partials/footer') %>

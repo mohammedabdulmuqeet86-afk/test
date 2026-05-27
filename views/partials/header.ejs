@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="WildHaven Adventure Park - An eco-adventure wildlife park with immersive habitats, interactive experiences, and conservation education. Open daily 9am-6pm.">
+  <meta name="keywords" content="wildlife park, adventure park, zoo, habitats, conservation, family day out">
+  <title><%= title %></title>
+  <link rel="stylesheet" href="/css/style.css">
+</head>
+<body id="page-<%= pageId %>">
+
+  <!-- Opening Times Banner -->
+  <div class="opening-banner" role="banner">
+    <div class="container">
+      <span class="opening-banner__text">Open Daily: <strong>9:00am &ndash; 6:00pm</strong></span>
+      <span class="opening-banner__separator">|</span>
+      <span class="opening-banner__text">Last Entry: <strong>5:00pm</strong></span>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <header class="site-header" role="navigation">
+    <div class="container site-header__inner">
+      <a href="/" class="site-logo" aria-label="WildHaven Adventure Park - Home">
+        <span class="site-logo__icon" aria-hidden="true">W</span>
+        <span class="site-logo__text">
+          <span class="site-logo__name">WildHaven</span>
+          <span class="site-logo__tagline">Adventure Park</span>
+        </span>
+      </a>
+
+      <!-- Search Bar -->
+      <div class="search-bar" id="search-bar">
+        <div class="search-bar__wrapper">
+          <input
+            type="search"
+            id="global-search"
+            class="search-bar__input"
+            placeholder="Search habitats, experiences, events..."
+            autocomplete="off"
+            aria-label="Search the park"
+          >
+          <button class="search-bar__btn" aria-label="Search" id="search-btn">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+          </button>
+        </div>
+        <div class="search-results" id="search-results" aria-live="polite"></div>
+      </div>
+
+      <!-- Hamburger Menu Button -->
+      <button class="nav-toggle" id="nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+        <span class="nav-toggle__bar"></span>
+      </button>
+
+      <!-- Main Navigation -->
+      <nav class="main-nav" id="main-nav" aria-label="Main navigation">
+        <ul class="main-nav__list">
+          <li class="main-nav__item">
+            <a href="/" class="main-nav__link <%= currentPath === '/' ? 'main-nav__link--active' : '' %>">Home</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="/habitats" class="main-nav__link <%= currentPath.startsWith('/habitats') ? 'main-nav__link--active' : '' %>">Habitats</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="/exhibits" class="main-nav__link <%= currentPath.startsWith('/exhibits') ? 'main-nav__link--active' : '' %>">Experiences</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="/events" class="main-nav__link <%= currentPath.startsWith('/events') ? 'main-nav__link--active' : '' %>">Events</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="/activity" class="main-nav__link <%= currentPath === '/activity' ? 'main-nav__link--active' : '' %>">Play</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="/faq" class="main-nav__link <%= currentPath === '/faq' ? 'main-nav__link--active' : '' %>">FAQ</a>
+          </li>
+          <li class="main-nav__item">
+            <a href="/contact" class="main-nav__link main-nav__link--cta <%= currentPath === '/contact' ? 'main-nav__link--active' : '' %>">Contact</a>
+          </li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main-content">
